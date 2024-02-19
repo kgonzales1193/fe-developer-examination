@@ -3,25 +3,42 @@
     <ion-split-pane content-id="main-content">
       <ion-menu content-id="main-content" type="overlay">
         <ion-content>
-          <ion-list id="inbox-list">
-            <ion-list-header>Inbox</ion-list-header>
-            <ion-note>hi@ionicframework.com</ion-note>
+          <ion-list>
+            <ion-item lines="none">
+              <ion-avatar slot="start">
+                <img alt="Silhouette of a person's head" src="https://ionicframework.com/docs/img/demos/avatar.svg" />
+              </ion-avatar>
+              <CrownIcon />
+              <ion-label slot="end">
+                0 Points
+                <ion-icon aria-hidden="true" slot="end" :ios="chevronForwardCircleOutline" :md="chevronForwardSharp"
+                  color="primary" style="margin-left: 8px;"></ion-icon>
+              </ion-label>
+            </ion-item>
+          </ion-list>
+          <ion-list id="app-list">
+            <ion-list-header>Chou Tzuyu</ion-list-header>
+            <ion-note>+63 912 345 6789</ion-note>
 
             <ion-menu-toggle :auto-hide="false" v-for="(p, i) in appPages" :key="i">
-              <ion-item @click="selectedIndex = i" router-direction="root" :router-link="p.url" lines="none" :detail="false" class="hydrated" :class="{ selected: selectedIndex === i }">
+              <ion-item @click="selectedIndex = i" router-direction="root" :router-link="p.url" lines="none"
+                :detail="false" class="hydrated" :class="{ selected: selectedIndex === i }">
                 <ion-icon aria-hidden="true" slot="start" :ios="p.iosIcon" :md="p.mdIcon"></ion-icon>
                 <ion-label>{{ p.title }}</ion-label>
+                <ion-badge slot="end">{{ p.badge }}</ion-badge>
               </ion-item>
             </ion-menu-toggle>
           </ion-list>
 
-          <ion-list id="labels-list">
-            <ion-list-header>Labels</ion-list-header>
-
-            <ion-item v-for="(label, index) in labels" lines="none" :key="index">
-              <ion-icon aria-hidden="true" slot="start" :ios="bookmarkOutline" :md="bookmarkSharp"></ion-icon>
-              <ion-label>{{ label }}</ion-label>
+          <ion-list id="settings-list">
+            <ion-item v-for="(s, index) in settings" lines="none" :key="index">
+              <ion-badge slot="end">{{ s.badge }}</ion-badge>
+              <ion-icon aria-hidden="true" slot="start" :ios="s.iosIcon" :md="s.mdIcon"></ion-icon>
+              <ion-label>{{ s.title }}</ion-label>
             </ion-item>
+          </ion-list>
+          <ion-list>
+            <ion-button>Logout</ion-button>
           </ion-list>
         </ion-content>
       </ion-menu>
@@ -31,9 +48,13 @@
 </template>
 
 <script setup lang="ts">
+
+import CrownIcon from './components/icons/CrownIcon.vue';
 import {
   IonApp,
+
   IonContent,
+  IonAvatar,
   IonIcon,
   IonItem,
   IonLabel,
@@ -44,19 +65,40 @@ import {
   IonNote,
   IonRouterOutlet,
   IonSplitPane,
+  IonButton,
 } from '@ionic/vue';
 import { ref } from 'vue';
 import {
   archiveOutline,
   archiveSharp,
+  bagCheckOutline,
+  bagCheckSharp,
+  bagHandleOutline,
+  bagHandleSharp,
   bookmarkOutline,
   bookmarkSharp,
+  caretForwardOutline,
+  caretForwardSharp,
+  chevronForwardCircleOutline,
+  chevronForwardSharp,
   heartOutline,
   heartSharp,
+  helpCircleOutline,
+  helpCircleSharp,
+  homeOutline,
+  homeSharp,
+  locationOutline,
+  locationSharp,
   mailOutline,
   mailSharp,
+  notificationsOutline,
+  notificationsSharp,
   paperPlaneOutline,
   paperPlaneSharp,
+  personOutline,
+  personSharp,
+  storefrontOutline,
+  storefrontSharp,
   trashOutline,
   trashSharp,
   warningOutline,
@@ -66,45 +108,66 @@ import {
 const selectedIndex = ref(0);
 const appPages = [
   {
-    title: 'Inbox',
-    url: '/folder/Inbox',
-    iosIcon: mailOutline,
-    mdIcon: mailSharp,
+    title: 'Home',
+    url: '/app/Home',
+    iosIcon: homeOutline,
+    mdIcon: homeSharp,
   },
   {
-    title: 'Outbox',
-    url: '/folder/Outbox',
-    iosIcon: paperPlaneOutline,
-    mdIcon: paperPlaneSharp,
+    title: 'Order Now',
+    url: '/app/Order',
+    iosIcon: bagCheckOutline,
+    mdIcon: bagCheckSharp,
   },
   {
-    title: 'Favorites',
-    url: '/folder/Favorites',
+    title: 'Notifications',
+    url: '/app/Notifications',
+    badge: '4',
+    iosIcon: notificationsOutline,
+    mdIcon: notificationsSharp,
+  },
+  {
+    title: 'Store Locator',
+    url: '/app/store-locator',
+    iosIcon: storefrontOutline,
+    mdIcon: storefrontSharp,
+  },
+  {
+    title: 'FAQs',
+    url: '/app/frequently-asked-questions',
+    iosIcon: helpCircleOutline,
+    mdIcon: helpCircleSharp,
+  },
+];
+const settings = [
+  {
+    title: 'My Orders',
+    badge: '6',
+    iosIcon: bagHandleOutline,
+    mdIcon: bagHandleSharp,
+  },
+  {
+    title: 'My Account',
+    iosIcon: personOutline,
+    mdIcon: personSharp,
+  },
+  {
+    title: 'My Favorites',
     iosIcon: heartOutline,
     mdIcon: heartSharp,
   },
   {
-    title: 'Archived',
-    url: '/folder/Archived',
+    title: 'Order Tracker',
+    iosIcon: locationOutline,
+    mdIcon: locationSharp,
+  },
+  {
+    title: 'Order History',
     iosIcon: archiveOutline,
     mdIcon: archiveSharp,
   },
-  {
-    title: 'Trash',
-    url: '/folder/Trash',
-    iosIcon: trashOutline,
-    mdIcon: trashSharp,
-  },
-  {
-    title: 'Spam',
-    url: '/folder/Spam',
-    iosIcon: warningOutline,
-    mdIcon: warningSharp,
-  },
-];
-const labels = ['Family', 'Friends', 'Notes', 'Work', 'Travel', 'Reminders'];
-
-const path = window.location.pathname.split('folder/')[1];
+]
+const path = window.location.pathname.split('app/')[1];
 if (path !== undefined) {
   selectedIndex.value = appPages.findIndex((page) => page.title.toLowerCase() === path.toLowerCase());
 }
@@ -113,6 +176,20 @@ if (path !== undefined) {
 <style scoped>
 ion-menu ion-content {
   --background: var(--ion-item-background, var(--ion-background-color, #fff));
+}
+
+#user-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  margin: auto;
+}
+
+#user-info {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 30px;
 }
 
 ion-menu.md ion-content {
@@ -126,6 +203,17 @@ ion-menu.md ion-list {
   padding: 20px 0;
 }
 
+ion-badge {
+  background: #EDBE4C;
+}
+
+ion-button {
+  margin: 20px 10px;
+  width: calc(100% - 120px);
+  height: 45px;
+}
+
+
 ion-menu.md ion-note {
   margin-bottom: 30px;
 }
@@ -135,11 +223,11 @@ ion-menu.md ion-note {
   padding-left: 10px;
 }
 
-ion-menu.md ion-list#inbox-list {
+ion-menu.md ion-list#app-list {
   border-bottom: 1px solid var(--ion-color-step-150, #d7d8da);
 }
 
-ion-menu.md ion-list#inbox-list ion-list-header {
+ion-menu.md ion-list#app-list ion-list-header {
   font-size: 22px;
   font-weight: 600;
 
@@ -175,7 +263,7 @@ ion-menu.md ion-item ion-icon {
 }
 
 ion-menu.md ion-item ion-label {
-  font-weight: 500;
+  font-weight: 600;
 }
 
 ion-menu.ios ion-content {
